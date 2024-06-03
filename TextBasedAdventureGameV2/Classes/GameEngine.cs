@@ -1,18 +1,18 @@
-﻿namespace TextBasedAdventureGameV2;
+﻿using TextBasedAdventureGameV2.DataStructure;
 
-using TextBasedAdventureGameV2.DataStructure;
+namespace TextBasedAdventureGameV2.Classes;
 
-internal class Program
+internal static class GameEngine
 {
-    static void Main(string[] args)
+    public static void BuildScenarios()
     {
-        var tree = new Tree<string>()
+        var tree = new Tree<Object>()
             .Begin("Mundo de Dragonball")
                 .Begin("Saga de Freezer")
-                    .Begin("Fuerzas especiales Guiniu")
-                        .Add("Ricum")
-                        .Add("Botter")
-                        .Add("Rojo")
+                    .Begin("Fuerzas especiales Ginyu")
+                        .Add(new Location("Una Fuerza sobrehumana esta frente a ti.", new Boss("Rikum", "", null, 1000, 200)))
+                        .Add("Boter")
+                        .Add("Yiz")
                     .End()
                 .End()
                 .Begin("Saga de Cell")
@@ -28,6 +28,4 @@ internal class Program
         tree.Nodes.ForEach(p => tree.PrintNode(p, 0));
         Console.ReadKey();
     }
-
-    
 }
