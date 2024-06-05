@@ -6,8 +6,8 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        GameEngine.BuildScenarios();
-        GameEngine.StartGame();
+        GameEngine gameEngine = new GameEngine();
+        gameEngine.StartGame();
     }
 
 
