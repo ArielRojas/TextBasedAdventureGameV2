@@ -1,17 +1,24 @@
 ﻿namespace TextBasedAdventureGameV2.Classes;
 
+using TextBasedAdventureGameV2.Constants;
 using TextBasedAdventureGameV2.Enums;
 
 internal class GameEngine
 {
     private static List<Location> _locations = [];
 
-    private Stack<Location> _stackFirstOption = new Stack<Location>();
-    private Stack<Location> _stackSecondOption = new Stack<Location>();
+    private Stack<Location> _stackFirstOption = [];
+    private Stack<Location> _stackSecondOption = [];
+    private Player player;
+
+    public GameEngine()
+    {
+        player = new Player("Silver", 1000, 200);
+    }
 
     public static int GetRandomNumberToStartGame()
     {
-        Random random = new Random();
+        var random = new Random();
         int minValue = 1;
         int maxValue = 10;
 
@@ -21,7 +28,11 @@ internal class GameEngine
     public void InitializeFirstStack()
     {
         Item item1 = new Item("KAME HAME HA", ItemType.POWER, "Gran cantidad de energía en las manos.");
+        Question question1 = new Question(QuestionConstants.Question1, QuestionConstants.Answer1, QuestionType.NO_CONFIRMATION);
+        Question question2 = new Question(QuestionConstants.Question2, QuestionConstants.Answer2, QuestionType.SIMPLE_SELECT);
         Boss boss1 = new Boss("Rikum", "Es un villano con mucha fuerza.", item1, 1000, 200);
+        boss1.AddQuestion(question1);
+        boss1.AddQuestion(question2);
         Location location1 = new Location("Una Fuerza sobrehumana esta frente a ti.", boss1);
 
         Item item2 = new Item("Kaioken", ItemType.VELOCITY, "Es una técnica poderosa que permite a los guerreros aumentar su fuerza y velocidad temporalmente.");
@@ -73,8 +84,23 @@ internal class GameEngine
 
         if (rollDice < 5)
         {
+            var location = _stackFirstOption.Peek();
+            var boss = location.LocationBoss;
             Console.WriteLine("Te toco primero la saga de Freezer.");
-            _stackFirstOption.Peek().ShowLocationInformation();
+            location.ShowLocationInformation();
+            boss.VerifyAnswerIsCorrect(player, boss.AskQuestion(location.LocationBoss.getQuestion(0), null));
+            boss.VerifyAnswerIsCorrect(player, boss.AskQuestion(location.LocationBoss.getQuestion(1), new string[] { "Oolong", "Puar", "Ten Ten" }));
+            _stackFirstOption.Pop();
+
+            if (player.AnsweredQuestionsNumber == 2)
+            {
+                player.AddItem(boss.Item);
+                _stackFirstOption.Pop();
+            }
+
+            location = _stackFirstOption.Peek();
+            boss = location.LocationBoss;
+            location.ShowLocationInformation();
         }
         else
         {

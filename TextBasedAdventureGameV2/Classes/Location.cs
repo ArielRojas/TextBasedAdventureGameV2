@@ -7,18 +7,18 @@ using TextBasedAdventureGameV2.Interfaces;
 internal class Location
 {
     public string Detail { get; set; }
-    public ICharacter Character { get; set; }
+    public Boss LocationBoss { get; set; }
 
-    public Location(string detail, ICharacter character)
+    public Location(string detail, Boss boss)
     {
         Detail = detail;
-        Character = character;
+        LocationBoss = boss;
     }
 
     public void ShowLocationInformation()
     {
         Console.WriteLine("==============================================================================================\n");
-        AnsiConsole.WriteLine($"Detalle de la localidad: {Detail} \nBoss: {Character.Name}");
+        AnsiConsole.WriteLine($"Detalle de la localidad: {Detail} \nBoss: {LocationBoss.Name}");
         Console.WriteLine("\n==============================================================================================\n");
     }
 }

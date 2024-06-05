@@ -1,6 +1,7 @@
 ﻿namespace TextBasedAdventureGameV2.Classes;
 
 using Spectre.Console;
+using TextBasedAdventureGameV2.Enums;
 using TextBasedAdventureGameV2.Interfaces;
 
 internal class Boss : ICharacter
@@ -51,9 +52,16 @@ internal class Boss : ICharacter
         questions.Add(question);
     }
 
-    public void AskQuestion(Question question)
+    public Question getQuestion(int index)
     {
-        
+        return questions[index];
+    }
+
+    public bool AskQuestion(Question question, string [] options)
+    {
+        QuestionHandler.SelectQuestionType(question, options);
+        CommonActions.ContinueWithGame();
+        return QuestionHandler.GetAnswerStatus();
     }
 
     public void ShowPoints()
@@ -62,5 +70,13 @@ internal class Boss : ICharacter
         pointsTable.AddColumn($"[red]Puntos de vida de {_name}: {_lifePoints}[/]");
         pointsTable.AddRow($"[red]Puntos de ataque de {_name}: {_attackPoints}[/]");
         AnsiConsole.Write(pointsTable);
+    }
+
+    public void VerifyAnswerIsCorrect(Player player, bool isAnswerCorrect)
+    {
+        if (isAnswerCorrect)
+        {
+            player.AnsweredQuestionsNumber++;
+        }
     }
 }
