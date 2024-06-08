@@ -1,6 +1,7 @@
 ﻿namespace TextBasedAdventureGameV2.Classes;
 
 using Spectre.Console;
+using TextBasedAdventureGameV2.Constants;
 using TextBasedAdventureGameV2.Enums;
 using TextBasedAdventureGameV2.Interfaces;
 
@@ -13,13 +14,14 @@ internal class Boss : ICharacter
     private int _attackPoints;
     private List<Question> questions;
 
-    public Boss(string name, string description, Item item, int lifePoints, int attackPoints)
+    public Boss(string name, string description, Item item, int lifePoints, int attackPoints, WildcardOption wildcardOption)
     {
         _name = name;
         _description = description;
         _item = item;
         _lifePoints = lifePoints;
         _attackPoints = attackPoints;
+        WildcardOption = wildcardOption;
         questions = [];
     }
 
@@ -36,6 +38,8 @@ internal class Boss : ICharacter
     }
 
     public Item Item => _item;
+
+    public WildcardOption WildcardOption { get; }
 
     public void InteractInGame(ICharacter character)
     {
@@ -57,9 +61,9 @@ internal class Boss : ICharacter
         return questions[index];
     }
 
-    public bool AskQuestion(Question question, string [] options)
+    public bool AskQuestion(Question question)
     {
-        QuestionHandler.SelectQuestionType(question, options);
+        QuestionHandler.SelectQuestionType(question, question.GetOptions().ToArray());
         CommonActions.ContinueWithGame();
         return QuestionHandler.GetAnswerStatus();
     }
@@ -67,8 +71,8 @@ internal class Boss : ICharacter
     public void ShowPoints()
     {
         var pointsTable = new Table();
-        pointsTable.AddColumn($"[red]Puntos de vida de {_name}: {_lifePoints}[/]");
-        pointsTable.AddRow($"[red]Puntos de ataque de {_name}: {_attackPoints}[/]");
+        pointsTable.AddColumn($"[red]{BossConstants.LifePoints} {_name}: {_lifePoints}[/]");
+        pointsTable.AddRow($"[red]{BossConstants.AttackPoints} {_name}: {_attackPoints}[/]");
         AnsiConsole.Write(pointsTable);
     }
 
