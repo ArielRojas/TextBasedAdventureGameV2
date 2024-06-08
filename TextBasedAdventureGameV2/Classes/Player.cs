@@ -34,8 +34,8 @@ internal class Player : ICharacter
     public void ShowPoints()
     {
         var pointsTable = new Table();
-        pointsTable.AddColumn($"[green]{Constants.PlayerLifePoints} {_lifePoints}[/]");
-        pointsTable.AddRow($"[green]{Constants.PlayerAttackPoints} {AttackPoints}[/]");
+        pointsTable.AddColumn($"[green]{PlayerConstants.PlayerLifePoints} {_lifePoints}[/]");
+        pointsTable.AddRow($"[green]{PlayerConstants.PlayerAttackPoints} {AttackPoints}[/]");
         AnsiConsole.Write(pointsTable);
     }
 
@@ -46,7 +46,7 @@ internal class Player : ICharacter
         while (showInformation)
         {
             var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
-            .Title($"[green]{Constants.PlayerInformation}[/]")
+            .Title($"[green]{PlayerConstants.PlayerInformation}[/]")
             .AddChoices(options));
 
             Dictionary<string, Action> actions = new Dictionary<string, Action>
@@ -69,10 +69,10 @@ internal class Player : ICharacter
     {
         var table = new Table();
 
-        AnsiConsole.WriteLine($"\n{Constants.PlayerItems}");
-        table.AddColumn(Constants.Item);
-        table.AddColumn(Constants.Descripcion);
-        table.AddColumn(Constants.Tipo);
+        AnsiConsole.WriteLine($"\n{PlayerConstants.PlayerItems}");
+        table.AddColumn(PlayerConstants.Item);
+        table.AddColumn(PlayerConstants.Descripcion);
+        table.AddColumn(PlayerConstants.Tipo);
 
         _itemsList.ForEach(item => table.AddRow(item.Name, item.Description, item.Type.ToString()));
 

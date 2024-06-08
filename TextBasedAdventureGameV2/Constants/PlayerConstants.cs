@@ -1,10 +1,7 @@
 ﻿namespace TextBasedAdventureGameV2.Constants;
 
-internal static class Constants
+internal static class PlayerConstants
 {
-    /// <summary>
-    /// Player Constants
-    /// </summary>
     public const string PlayerLifePoints = "Tus puntos de vida:";
     public const string PlayerAttackPoints = "Tus puntos de ataque:";
     public const string PlayerInformation = "Informacion del Jugador";
@@ -12,8 +9,4 @@ internal static class Constants
     public const string Item = "Item";
     public const string Descripcion = "Descripcion";
     public const string Tipo = "Tipo";
-
-    /// <summary>
-    /// Boss Constants
-    /// </summary>
 }
