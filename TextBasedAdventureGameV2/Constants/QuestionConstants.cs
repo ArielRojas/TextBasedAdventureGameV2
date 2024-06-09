@@ -9,7 +9,7 @@ public static class QuestionConstants
     public const string Question3 = "¿El nombre que se puso el maestro roshi cuando se disfrazo para participar en el torneo de artes marciales era Jackie Chu?";
     public const string Answer3 = "Su nombre era Jackie Chun";
     public const string Question4 = "¿Con que maestro Goku aprendió a volar?";
-    public const string Answer4 = "kamisama";
+    public const string Answer4 = "Kamisama";
     public const string Question5 = "¿Cuál es la técnica especial de Piccolo?";
     public const string Answer5 = "Makankosappo";
     public const string Question6 = "¿Bulma le corto la cola a vegeta ozaru?";
