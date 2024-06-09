@@ -27,6 +27,8 @@ internal class Boss : ICharacter
 
     public string Name => _name;
 
+    public string Description => _description;
+
     public int LifePoints
     {
         get => _lifePoints;
@@ -43,7 +45,10 @@ internal class Boss : ICharacter
 
     public void InteractInGame(ICharacter character)
     {
-        throw new NotImplementedException();
+        Console.WriteLine($"Preparate para el ataque de {Name}");
+        Console.WriteLine($"{AnimationStrings.animation3}");
+        Thread.Sleep(AnimationStrings.timeToFight);
+        character.ReceiveAttack(AttackPoints);
     }
 
     public int ReceiveAttack(int attack)
@@ -81,6 +86,7 @@ internal class Boss : ICharacter
         if (isAnswerCorrect)
         {
             player.AnsweredQuestionsNumber++;
+            player.IncreaseLifePoints(PlayerConstants.LifePointsByQuestion);
         }
     }
 }

@@ -4,9 +4,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        GameEngine gameEngine = new GameEngine();
-        gameEngine.StartGame();
+        GameEngine gameEngine = new();
+        gameEngine.PlayGame();
     }
-
-
 }

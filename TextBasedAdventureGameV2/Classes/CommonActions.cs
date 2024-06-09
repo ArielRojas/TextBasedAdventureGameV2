@@ -9,6 +9,7 @@
             Console.WriteLine(GameConstants.PressKeyToContinueGame);
             Console.WriteLine();
             Console.ReadKey();
+            Console.Clear();
         }
     }
 }

@@ -2,14 +2,14 @@
 
 using Spectre.Console;
 using TextBasedAdventureGameV2.Constants;
+using TextBasedAdventureGameV2.Enums;
 using TextBasedAdventureGameV2.Interfaces;
+
 internal class Player : ICharacter
 {
-    private readonly string _name;
-    private List<Item> _itemsList;
+    private string _name;
+    private readonly List<Item> _itemsList;
     private int _lifePoints;
-    public int AttackPoints { get; set; }
-    public int AnsweredQuestionsNumber { get; set; }
 
     public Player(string name, int lifePoints, int attackPoints)
     {
@@ -19,7 +19,21 @@ internal class Player : ICharacter
         AnsweredQuestionsNumber = 0;
         _itemsList = [];
     }
-    public string Name => _name;
+
+    public string Name
+    {
+        get => _name;
+        set => _name = value;
+    }
+
+    public int AttackPoints { get; set; }
+    public int AnsweredQuestionsNumber { get; set; }
+
+    public int LifePoints
+    {
+        get => _lifePoints;
+        set => _lifePoints = value;
+    }
 
     public int ReceiveAttack(int attack)
     {
@@ -62,7 +76,57 @@ internal class Player : ICharacter
 
     public void InteractInGame(ICharacter character)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Ataca con todo tu poder!!!");
+        Console.WriteLine($"{AnimationStrings.animation3}");
+        Thread.Sleep(AnimationStrings.timeToFight);
+        character.ReceiveAttack(AttackPoints);
+    }
+
+    public void IncreasePower(Item item)
+    {
+        Dictionary<Enum, Action> increasePoints = new Dictionary<Enum, Action>
+        {
+            {ItemType.SANITY, () => IncreaseLifePoints(PlayerConstants.LifePointsBySanity)},
+            {ItemType.VELOCITY, IncreasePointsByVelocityItem},
+            {ItemType.POWER, IncreasePointsByPowerItem}
+        };
+
+        increasePoints[item.Type]();
+    }
+
+    public int IncreaseLifePoints(int points)
+    {
+        return _lifePoints += points;
+    }
+
+    public void IncreasePointsByVelocityItem()
+    {
+        IncreaseLifePoints(PlayerConstants.LifePointsByVelocity);
+        IncreaseAttackPoints(PlayerConstants.AttackPointsByVelocity);
+    }
+
+    public void IncreasePointsByPowerItem()
+    {
+        IncreaseLifePoints(PlayerConstants.LifePointsByPower);
+        IncreaseAttackPoints(PlayerConstants.AttackPointsByPower);
+    }
+
+    public Item SelectItemToFight()
+    {
+        string itemName = SelectItem();
+        var item = SearchItem(itemName);
+
+        return item;
+    }
+
+    private int IncreaseAttackPoints(int points)
+    {
+        return AttackPoints += points;
+    }
+
+    private List<string> GetItemNamesList()
+    {
+        return _itemsList.Select(item => item.Name).ToList();
     }
 
     private void ShowItemsOnTable()
@@ -77,5 +141,20 @@ internal class Player : ICharacter
         _itemsList.ForEach(item => table.AddRow(item.Name, item.Description, item.Type.ToString()));
 
         AnsiConsole.Write(table);
+    }
+
+    private Item SearchItem(string itemName)
+    {
+        return _itemsList.Where(item => itemName.Equals(item.Name)).First();
+    }
+
+    private string SelectItem()
+    {
+        var answer = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title($"[green]{PlayerConstants.SelectItemToFight}[/]")
+                .AddChoices(GetItemNamesList()));
+
+        return answer;
     }
 }
