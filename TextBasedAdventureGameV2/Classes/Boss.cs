@@ -5,14 +5,15 @@ using TextBasedAdventureGameV2.Constants;
 using TextBasedAdventureGameV2.Enums;
 using TextBasedAdventureGameV2.Interfaces;
 
-internal class Boss : ICharacter
+public class Boss : ICharacter
 {
     private string _name;
     private string _description;
     private Item _item;
     private int _lifePoints;
     private int _attackPoints;
-    private List<Question> questions;
+    private WildcardOption _wildcardOption;
+    private List<Question> _questions;
 
     public Boss(string name, string description, Item item, int lifePoints, int attackPoints, WildcardOption wildcardOption)
     {
@@ -21,8 +22,8 @@ internal class Boss : ICharacter
         _item = item;
         _lifePoints = lifePoints;
         _attackPoints = attackPoints;
-        WildcardOption = wildcardOption;
-        questions = [];
+        _wildcardOption = wildcardOption;
+        _questions = [];
     }
 
     public string Name => _name;
@@ -41,7 +42,7 @@ internal class Boss : ICharacter
 
     public Item Item => _item;
 
-    public WildcardOption WildcardOption { get; }
+    public WildcardOption WildcardOption => _wildcardOption;
 
     public void InteractInGame(ICharacter character)
     {
@@ -58,12 +59,12 @@ internal class Boss : ICharacter
 
     public void AddQuestion(Question question)
     {
-        questions.Add(question);
+        _questions.Add(question);
     }
 
     public Question getQuestion(int index)
     {
-        return questions[index];
+        return _questions[index];
     }
 
     public bool AskQuestion(Question question)

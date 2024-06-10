@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextBasedAdventureGameV2.Enums
 {
-    internal enum WildcardOption
+    public enum WildcardOption
     {
         YES,
         NO

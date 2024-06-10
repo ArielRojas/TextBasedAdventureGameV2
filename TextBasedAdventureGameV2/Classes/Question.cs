@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
+﻿namespace TextBasedAdventureGameV2.Classes;
+
 using TextBasedAdventureGameV2.Enums;
 
-namespace TextBasedAdventureGameV2.Classes;
-
-internal class Question
+public class Question
 {
     private List<string> _options;
 

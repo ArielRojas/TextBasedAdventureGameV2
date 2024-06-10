@@ -1,6 +1,6 @@
 ﻿namespace TextBasedAdventureGameV2.Interfaces;
 
-internal interface ICharacter
+public interface ICharacter
 {
     string Name { get; }
 

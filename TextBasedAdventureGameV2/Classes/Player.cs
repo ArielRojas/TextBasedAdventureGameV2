@@ -5,7 +5,7 @@ using TextBasedAdventureGameV2.Constants;
 using TextBasedAdventureGameV2.Enums;
 using TextBasedAdventureGameV2.Interfaces;
 
-internal class Player : ICharacter
+public class Player : ICharacter
 {
     private string _name;
     private readonly List<Item> _itemsList;

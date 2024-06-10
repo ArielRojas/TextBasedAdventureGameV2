@@ -2,7 +2,7 @@
 
 using TextBasedAdventureGameV2.Enums;
 
-internal class Item
+public class Item
 {
     private readonly string _name;
     private readonly ItemType _type;

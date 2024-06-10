@@ -1,8 +1,6 @@
 ﻿namespace TextBasedAdventureGameV2.Classes;
 
 using Spectre.Console;
-using System.Xml.Linq;
-using TextBasedAdventureGameV2.Interfaces;
 
 internal class Location
 {
