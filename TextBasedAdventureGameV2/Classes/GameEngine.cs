@@ -87,7 +87,7 @@ internal class GameEngine
         var question5 = new Question(QuestionConstants.Question5, QuestionConstants.Answer5, QuestionType.SIMPLE_SELECT);
         question5.AddOptions(["Resplandor Final", "Genki-dama", "Makankosappo"]);
         var question6 = new Question(QuestionConstants.Question6, QuestionConstants.Answer6, QuestionType.NO_CONFIRMATION);
-        Boss boss3 = new Boss("Jheese", "Es un villano con gran velocidad.", item3, 2000, 500, WildcardOption.YES);
+        var boss3 = new Boss("Jheese", "Es un villano con gran velocidad.", item3, 2000, 500, WildcardOption.YES);
         boss3.AddQuestion(question5);
         boss3.AddQuestion(question6);
         var location3 = new Location("Aumenta tu velocidad.", boss3);

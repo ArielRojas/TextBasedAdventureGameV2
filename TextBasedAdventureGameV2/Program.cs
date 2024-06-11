@@ -1,4 +1,6 @@
-﻿namespace TextBasedAdventureGameV2.Classes;
+﻿namespace TextBasedAdventureGameV2;
+
+using TextBasedAdventureGameV2.Classes;
 
 internal class Program
 {

@@ -6,6 +6,7 @@ public static class QuestionConstants
     public const string Answer1 = "La persona que lo encontro se llama Son Gohan";
     public const string Question2 = "¿Cuál es el nombre del mejor amigo de Yamcha?";
     public const string Answer2 = "Puar";
+    public static string[] options2 = new string[] { "Oolong", "Puar", "Ten Ten" };
     public const string Question3 = "¿El nombre que se puso el maestro roshi cuando se disfrazo para participar en el torneo de artes marciales era Jackie Chu?";
     public const string Answer3 = "Su nombre era Jackie Chun";
     public const string Question4 = "¿Con que maestro Goku aprendió a volar?";
