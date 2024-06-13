@@ -1,6 +1,7 @@
 ﻿namespace TextBasedAdventureGameV2.Classes;
 
 using Spectre.Console;
+using System.Numerics;
 using TextBasedAdventureGameV2.Constants;
 using TextBasedAdventureGameV2.Enums;
 
@@ -24,10 +25,10 @@ public class Location
 
     public List<object> InteractInGame(Player player, int level)
     {
+        player.AnsweredQuestionsNumber = 0;
         List<object> results = new();
         var doesLevelWin = false;
-        player.AnsweredQuestionsNumber = 0;
-        var recoverLifePoints = 0;
+
         ShowLocationInformation();
         Boss.VerifyAnswerIsCorrect(player, Boss.AskQuestion(Boss.getQuestion(0)));
         Boss.VerifyAnswerIsCorrect(player, Boss.AskQuestion(Boss.getQuestion(CommonConstants.ONE)));
@@ -36,6 +37,19 @@ public class Location
         player.ShowInformation(PlayerConstants.DisplayItems, PlayerConstants.DisplayLifeAndAttackPoints, PlayerConstants.ContinueWithGame);
         player.IncreasePower(player.SelectItemToFight());
         player.ShowPoints();
+        doesLevelWin = Fight(player);
+        level = WinWilcard(player, level);
+        results.Add(level);
+        results.Add(doesLevelWin);
+
+        return results;
+    }
+
+    private bool Fight(Player player)
+    {
+        var doesLevelWin = false;
+        var recoverLifePoints = 0;
+
         while (Boss.LifePoints > 0 && player.LifePoints > 0)
         {
             player.InteractInGame(Boss);
@@ -61,11 +75,7 @@ public class Location
             Console.WriteLine(GameConstants.FinalPartLoseSentence);
         }
 
-        level = WinWilcard(player, level);
-        results.Add(level);
-        results.Add(doesLevelWin);
-
-        return results;
+        return doesLevelWin;
     }
 
     private int WinWilcard(Player player, int level)
