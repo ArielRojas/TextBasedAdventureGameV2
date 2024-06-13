@@ -8,8 +8,8 @@ using TextBasedAdventureGameV2.Enums;
 
 internal class GameEngine
 {
-    private readonly Stack<Location> _stackFirstOption;
-    private readonly Stack<Location> _stackSecondOption;
+    private Dictionary<int, Location> _freezerSagaLevels;
+    private Dictionary<int, Location> _cellSagaLevels;
     private Player _player;
     private int _level;
 
@@ -17,8 +17,8 @@ internal class GameEngine
     {
         _player = new Player("Default", 700, 200);
         _level = 1;
-        _stackFirstOption = [];
-        _stackSecondOption = [];
+        _freezerSagaLevels = [];
+        _cellSagaLevels = [];
     }
 
     public void ShowGameName()
@@ -34,7 +34,7 @@ internal class GameEngine
         _player.AddItem(initialItem);
         var welcome = $"\nBienvenido {name}!!!\n";
         AnsiConsole.MarkupInterpolated($"[bold orange1]{welcome}[/]");
-        Thread.Sleep(AnimationStrings.sleep);
+        CommonActions.StartWithTheGame();
 
         return name;
     }
@@ -46,9 +46,7 @@ internal class GameEngine
         panel.Header = new PanelHeader($"[bold]Dragon Ball Game[/]");
         panel.Expand = true;
         AnsiConsole.Write(panel);
-        Console.WriteLine(GameConstants.PressKeyToStartGame);
-        Console.ReadKey();
-        Console.Clear();
+        CommonActions.ContinueWithGame();
     }
 
     public void ShowInformationForPlayer()
@@ -60,10 +58,9 @@ internal class GameEngine
         AnsiConsole.MarkupLine($"[orange1]{GameConstants.InformationFourthSentence}[/]");
         AnsiConsole.MarkupLine($"[orange1]{GameConstants.InformationFifthSentence}[/]");
         CommonActions.ContinueWithGame();
-        Console.Clear();
     }
 
-    public void InitializeFirstStack()
+    public void InitializeObjectForFreezerSaga()
     {
         var location1 = LocationBuilder.BuildLocation(CommonConstants.ONE);
         location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.ONE));
@@ -81,14 +78,14 @@ internal class GameEngine
         location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.NINE));
         location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.TEN));
 
-        _stackFirstOption.Push(location5);
-        _stackFirstOption.Push(location4);
-        _stackFirstOption.Push(location3);
-        _stackFirstOption.Push(location2);
-        _stackFirstOption.Push(location1);
+        _freezerSagaLevels[CommonConstants.ONE] = location1;
+        _freezerSagaLevels[CommonConstants.TWO] = location2;
+        _freezerSagaLevels[CommonConstants.THREE] = location3;
+        _freezerSagaLevels[CommonConstants.FOUR] = location4;
+        _freezerSagaLevels[CommonConstants.FIVE] = location5;
     }
 
-    public void InitializeSecondStack()
+    public void InitializeObjectsForCellSaga()
     {
         var location1 = LocationBuilder.BuildLocation(CommonConstants.SIX);
         location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.ONE));
@@ -106,11 +103,11 @@ internal class GameEngine
         location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.NINE));
         location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.TEN));
 
-        _stackSecondOption.Push(location5);
-        _stackSecondOption.Push(location4);
-        _stackSecondOption.Push(location3);
-        _stackSecondOption.Push(location2);
-        _stackSecondOption.Push(location1);
+        _cellSagaLevels[CommonConstants.ONE] = location1;
+        _cellSagaLevels[CommonConstants.TWO] = location2;
+        _cellSagaLevels[CommonConstants.THREE] = location3;
+        _cellSagaLevels[CommonConstants.FOUR] = location4;
+        _cellSagaLevels[CommonConstants.FIVE] = location5;
     }
 
     public void PlayGame()
@@ -122,263 +119,16 @@ internal class GameEngine
         ShowOptions(GameConstants.FreezerSaga, GameConstants.CellSaga);
     }
 
-    public Stack<Location> GetStackBySaga(string saga)
-    {
-        if (saga.Equals(GameConstants.FreezerSaga))
-        {
-            return _stackFirstOption;
-        }
-        else
-        {
-            return _stackSecondOption;
-        }
-    }
-
     public void PlayFreezerSaga()
     {
-        InitializeFirstStack();
-        PlaySaga(_stackFirstOption);
+        InitializeObjectForFreezerSaga();
+        PlaySaga(_freezerSagaLevels);
     }
 
     public void PlayCellSaga()
     {
-        InitializeSecondStack();
-        PlaySaga(_stackSecondOption);
-    }
-
-    private void PlaySaga(Stack<Location> stack)
-    {
-        var finishFlag = false;
-
-        while (_player.LifePoints > 0 && !finishFlag)
-        {
-            var recoverLifePoints = 0;
-
-            switch (_level)
-            {
-                case 1:
-                    _player.AnsweredQuestionsNumber = 0;
-                    var location = stack.Peek();
-                    var boss = location.Boss;
-                    var item = boss.Item;
-                    location.ShowLocationInformation();
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(0)));
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(1)));
-                    boss.ShowPoints();
-                    _player.ShowPoints();
-                    _player.ShowInformation(PlayerConstants.DisplayItems, PlayerConstants.DisplayLifeAndAttackPoints, PlayerConstants.ContinueWithGame);
-                    _player.IncreasePower(_player.SelectItemToFight());
-                    _player.ShowPoints();
-                    while (boss.LifePoints > 0 && _player.LifePoints > 0)
-                    {
-                        _player.InteractInGame(boss);
-                        if (boss.LifePoints <= 0)
-                        {
-                            break;
-                        }
-                        boss.InteractInGame(_player);
-                        recoverLifePoints += boss.AttackPoints;
-                    }
-
-                    if (_player.LifePoints > 0)
-                    {
-                        Console.WriteLine($"Felicidades!!!, lograste vencer a {boss.Name}.");
-                        Console.WriteLine($"Ganaste el item: {item.Name}");
-                        _player.AddItem(item);
-                        _player.LifePoints += recoverLifePoints;
-                        CommonActions.ContinueWithGame();
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Perdiste, la siguiente vez lo haras mejor.");
-                    }
-
-                    stack.Pop();
-
-                    _level = WinWilcard(_player, boss, _level, stack);
-                    break;
-
-                case 2:
-                    _player.AnsweredQuestionsNumber = 0;
-                    location = stack.Peek();
-                    boss = location.Boss;
-                    item = boss.Item;
-                    location.ShowLocationInformation();
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(0)));
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(1)));
-                    boss.ShowPoints();
-                    _player.ShowPoints();
-                    _player.ShowInformation(PlayerConstants.DisplayItems, PlayerConstants.DisplayLifeAndAttackPoints, PlayerConstants.ContinueWithGame);
-                    _player.IncreasePower(_player.SelectItemToFight());
-                    _player.ShowPoints();
-                    while (boss.LifePoints > 0 && _player.LifePoints > 0)
-                    {
-                        _player.InteractInGame(boss);
-                        if (boss.LifePoints <= 0)
-                        {
-                            break;
-                        }
-                        boss.InteractInGame(_player);
-                        recoverLifePoints += boss.AttackPoints;
-                    }
-
-                    if (_player.LifePoints > 0)
-                    {
-                        Console.WriteLine($"Felicidades!!!, lograste vencer a {boss.Name}.");
-                        Console.WriteLine($"Ganaste el item: {item.Name}");
-                        _player.AddItem(item);
-                        _player.LifePoints += recoverLifePoints;
-                        CommonActions.ContinueWithGame();
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Perdiste, la siguiente vez lo haras mejor.");
-                    }
-
-                    stack.Pop();
-                    _level = WinWilcard(_player, boss, _level, stack);
-                    break;
-
-                case 3:
-                    _player.AnsweredQuestionsNumber = 0;
-                    location = stack.Peek();
-                    boss = location.Boss;
-                    item = boss.Item;
-                    location.ShowLocationInformation();
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(0)));
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(1)));
-                    boss.ShowPoints();
-                    _player.ShowPoints();
-                    _player.ShowInformation(PlayerConstants.DisplayItems, PlayerConstants.DisplayLifeAndAttackPoints, PlayerConstants.ContinueWithGame);
-                    _player.IncreasePower(_player.SelectItemToFight());
-                    _player.ShowPoints();
-                    while (boss.LifePoints > 0 && _player.LifePoints > 0)
-                    {
-                        _player.InteractInGame(boss);
-                        if (boss.LifePoints <= 0)
-                        {
-                            break;
-                        }
-                        boss.InteractInGame(_player);
-                        recoverLifePoints += boss.AttackPoints;
-                    }
-
-                    if (_player.LifePoints > 0)
-                    {
-                        Console.WriteLine($"Felicidades!!!, lograste vencer a {boss.Name}.");
-                        Console.WriteLine($"Ganaste el item: {item.Name}");
-                        _player.AddItem(item);
-                        _player.LifePoints += recoverLifePoints;
-                        CommonActions.ContinueWithGame();
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Perdiste, la siguiente vez lo haras mejor.");
-                    }
-
-                    stack.Pop();
-                    _level = WinWilcard(_player, boss, _level, stack);
-                    break;
-
-                case 4:
-                    _player.AnsweredQuestionsNumber = 0;
-                    location = stack.Peek();
-                    boss = location.Boss;
-                    item = boss.Item;
-                    location.ShowLocationInformation();
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(0)));
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(1)));
-                    boss.ShowPoints();
-                    _player.ShowPoints();
-                    _player.ShowInformation(PlayerConstants.DisplayItems, PlayerConstants.DisplayLifeAndAttackPoints, PlayerConstants.ContinueWithGame);
-                    _player.IncreasePower(_player.SelectItemToFight());
-                    _player.ShowPoints();
-                    while (boss.LifePoints > 0 && _player.LifePoints > 0)
-                    {
-                        _player.InteractInGame(boss);
-                        if (boss.LifePoints <= 0)
-                        {
-                            break;
-                        }
-                        boss.InteractInGame(_player);
-                        recoverLifePoints += boss.AttackPoints;
-                    }
-
-                    if (_player.LifePoints > 0)
-                    {
-                        Console.WriteLine($"Felicidades!!!, lograste vencer a {boss.Name}.");
-                        Console.WriteLine($"Ganaste el item: {item.Name}");
-                        _player.AddItem(item);
-                        _player.LifePoints += recoverLifePoints;
-                        CommonActions.ContinueWithGame();
-                        Console.Clear();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Perdiste, la siguiente vez lo haras mejor.");
-                    }
-
-                    stack.Pop();
-                    _level = WinWilcard(_player, boss, _level, stack);
-                    break;
-
-                case 5:
-                    _player.AnsweredQuestionsNumber = 0;
-                    location = stack.Peek();
-                    boss = location.Boss;
-                    item = boss.Item;
-                    location.ShowLocationInformation();
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(0)));
-                    boss.VerifyAnswerIsCorrect(_player, boss.AskQuestion(location.Boss.getQuestion(1)));
-                    boss.ShowPoints();
-                    _player.ShowPoints();
-                    _player.ShowInformation(PlayerConstants.DisplayItems, PlayerConstants.DisplayLifeAndAttackPoints, PlayerConstants.ContinueWithGame);
-                    _player.IncreasePower(_player.SelectItemToFight());
-                    _player.ShowPoints();
-                    while (boss.LifePoints > 0 && _player.LifePoints > 0)
-                    {
-                        _player.InteractInGame(boss);
-                        if (boss.LifePoints <= 0)
-                        {
-                            break;
-                        }
-                        boss.InteractInGame(_player);
-                    }
-
-                    if (_player.LifePoints > 0)
-                    {
-                        _player.AddItem(item);
-                        _player.LifePoints += recoverLifePoints;
-                        Console.WriteLine($"{GameConstants.FinalPartFirstSentence} {boss.Name}.");
-                        Thread.Sleep(AnimationStrings.sleep);
-                        Console.WriteLine($"{GameConstants.FinalPartSecondSentence} {item.Name}, {GameConstants.FinalPartThirdSentence}");
-                        Thread.Sleep(AnimationStrings.sleep);
-                        Console.WriteLine($"{GameConstants.FinalPartFourthSentence}");
-                        Thread.Sleep(AnimationStrings.sleep);
-                        Console.Clear();
-                        PrintDragon();
-                        Console.WriteLine($"\n{_player.Name} {GameConstants.FinalPartFifthSentence}");
-                        Thread.Sleep(AnimationStrings.sleep);
-                        Console.WriteLine($"{GameConstants.FinalPartSixthSentence}");
-                        Console.WriteLine($"{GameConstants.FinalPartSevenSentence}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{GameConstants.FinalPartLoseSentence}");
-                    }
-
-                    stack.Pop();
-                    _level = WinWilcard(_player, boss, _level, stack);
-
-                    break;
-                default:
-                    finishFlag = true;
-                    break;
-            }
-        }
+        InitializeObjectsForCellSaga();
+        PlaySaga(_cellSagaLevels);
     }
 
     private void ShowOptions(params string[] options)
@@ -401,20 +151,39 @@ internal class GameEngine
         AnsiConsole.MarkupInterpolated($"[bold darkgreen]{AnimationStrings.dragon}[/]");
     }
 
-    private int WinWilcard(Player player, Boss boss, int level, Stack<Location> stack)
+    private void PlaySaga(Dictionary<int, Location> saga)
     {
-        int result;
+        var finishFlag = false;
+        var level = 1;
 
-        if (player.AnsweredQuestionsNumber == 2 && boss.WildcardOption == WildcardOption.YES)
+        while (_player.LifePoints > 0 && !finishFlag)
         {
-            stack.Pop();
-            result = level + 2;
-        }
-        else
-        {
-            result = level + 1;
-        }
+            var list = saga[level].InteractInGame(_player, level);
+            level = (int)list[CommonConstants.ZERO];
+            var doesPlayerWin = (bool)list[CommonConstants.ONE];
 
-        return result;
+            if (level > CommonConstants.FIVE || saga[level].Boss.Equals(BossConstants.BossName5) || saga[level].Boss.Equals(BossConstants.BossName10))
+            {
+                if (doesPlayerWin)
+                {
+                    ShowEndGameCredits();
+                    finishFlag = true;
+                }
+            }
+        }
+    }
+
+    private void ShowEndGameCredits()
+    {
+        Console.WriteLine($"{GameConstants.FinalPartFourthSentence}");
+        Thread.Sleep(AnimationStrings.sleep);
+        Console.Clear();
+        PrintDragon();
+        Console.WriteLine($"\n{_player.Name} {GameConstants.FinalPartFifthSentence}");
+        Thread.Sleep(AnimationStrings.sleep);
+        Console.WriteLine($"{GameConstants.FinalPartSixthSentence}");
+        Thread.Sleep(AnimationStrings.sleep);
+        Console.WriteLine($"{GameConstants.FinalPartSevenSentence}");
+        Thread.Sleep(AnimationStrings.sleep);
     }
 }

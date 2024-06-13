@@ -80,7 +80,7 @@ public static class QuestionBuilder
         { CommonConstants.FIVE, new Question(QuestionConstants.Question5, QuestionConstants.Answer5, QuestionType.SIMPLE_SELECT, QuestionConstants.options5) },
         { CommonConstants.SIX, new Question(QuestionConstants.Question6, QuestionConstants.Answer6, QuestionType.NO_CONFIRMATION, []) },
         { CommonConstants.SEVEN, new Question(QuestionConstants.Question7, QuestionConstants.Answer7, QuestionType.SIMPLE_SELECT, QuestionConstants.options7) },
-        { CommonConstants.EIGHT, new Question(QuestionConstants.Question8, QuestionConstants.Answer8, QuestionType.SIMPLE_SELECT, []) },
+        { CommonConstants.EIGHT, new Question(QuestionConstants.Question8, QuestionConstants.Answer8, QuestionType.SIMPLE_SELECT, QuestionConstants.options8) },
         { CommonConstants.NINE, new Question(QuestionConstants.Question9, QuestionConstants.Answer9, QuestionType.SIMPLE_SELECT, QuestionConstants.options9) },
         { CommonConstants.TEN, new Question(QuestionConstants.Question10, QuestionConstants.Answer10, QuestionType.SIMPLE_SELECT, QuestionConstants.options10) }
     };

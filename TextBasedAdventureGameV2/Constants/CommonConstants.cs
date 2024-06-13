@@ -2,6 +2,7 @@
 
 public class CommonConstants
 {
+    public const int ZERO = 0;
     public const int ONE = 1;
     public const int TWO = 2;
     public const int THREE = 3;

@@ -11,5 +11,12 @@
             Console.ReadKey();
             Console.Clear();
         }
+
+        public static void StartWithTheGame()
+        {
+            Console.WriteLine(GameConstants.PressKeyToStartGame);
+            Console.ReadKey();
+            Console.Clear();
+        }
     }
 }
