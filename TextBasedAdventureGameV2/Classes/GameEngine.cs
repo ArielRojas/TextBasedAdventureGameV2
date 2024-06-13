@@ -11,12 +11,10 @@ internal class GameEngine
     private Dictionary<int, Location> _freezerSagaLevels;
     private Dictionary<int, Location> _cellSagaLevels;
     private Player _player;
-    private int _level;
 
     public GameEngine()
     {
         _player = new Player("Default", 700, 200);
-        _level = 1;
         _freezerSagaLevels = [];
         _cellSagaLevels = [];
     }
