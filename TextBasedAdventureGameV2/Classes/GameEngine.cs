@@ -65,21 +65,21 @@ internal class GameEngine
 
     public void InitializeFirstStack()
     {
-        var location1 = LocationBuilder.BuildLocation(1);
-        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(1));
-        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(2));
-        var location2 = LocationBuilder.BuildLocation(2);
-        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(3));
-        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(4));
-        var location3 = LocationBuilder.BuildLocation(3);
-        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(5));
-        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(6));
-        var location4 = LocationBuilder.BuildLocation(4);
-        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(7));
-        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(8));
-        var location5 = LocationBuilder.BuildLocation(5);
-        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(9));
-        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(10));
+        var location1 = LocationBuilder.BuildLocation(CommonConstants.ONE);
+        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.ONE));
+        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.TWO));
+        var location2 = LocationBuilder.BuildLocation(CommonConstants.TWO);
+        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.THREE));
+        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.FOUR));
+        var location3 = LocationBuilder.BuildLocation(CommonConstants.THREE);
+        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.FIVE));
+        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.SIX));
+        var location4 = LocationBuilder.BuildLocation(CommonConstants.FOUR);
+        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.SEVEN));
+        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.EIGHT));
+        var location5 = LocationBuilder.BuildLocation(CommonConstants.FIVE);
+        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.NINE));
+        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.TEN));
 
         _stackFirstOption.Push(location5);
         _stackFirstOption.Push(location4);
@@ -90,21 +90,21 @@ internal class GameEngine
 
     public void InitializeSecondStack()
     {
-        var location1 = LocationBuilder.BuildLocation(6);
-        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(1));
-        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(2));
-        var location2 = LocationBuilder.BuildLocation(7);
-        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(3));
-        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(4));
-        var location3 = LocationBuilder.BuildLocation(8);
-        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(5));
-        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(6));
-        var location4 = LocationBuilder.BuildLocation(9);
-        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(7));
-        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(8));
-        var location5 = LocationBuilder.BuildLocation(10);
-        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(9));
-        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(10));
+        var location1 = LocationBuilder.BuildLocation(CommonConstants.SIX);
+        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.ONE));
+        location1.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.TWO));
+        var location2 = LocationBuilder.BuildLocation(CommonConstants.SEVEN);
+        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.THREE));
+        location2.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.FOUR));
+        var location3 = LocationBuilder.BuildLocation(CommonConstants.EIGHT);
+        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.FIVE));
+        location3.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.SIX));
+        var location4 = LocationBuilder.BuildLocation(CommonConstants.NINE);
+        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.SEVEN));
+        location4.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.EIGHT));
+        var location5 = LocationBuilder.BuildLocation(CommonConstants.TEN);
+        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.NINE));
+        location5.Boss.AddQuestion(QuestionBuilder.BuildQuestion(CommonConstants.TEN));
 
         _stackSecondOption.Push(location5);
         _stackSecondOption.Push(location4);
@@ -387,7 +387,7 @@ internal class GameEngine
             .Title($"[green]{GameConstants.ChooseSaga}[/]")
             .AddChoices(options));
 
-        Dictionary<string, Action> optionsToChoose = new Dictionary<string, Action>
+        var optionsToChoose = new Dictionary<string, Action>
             {
                 {GameConstants.FreezerSaga, PlayFreezerSaga},
                 {GameConstants.CellSaga, PlayCellSaga}
