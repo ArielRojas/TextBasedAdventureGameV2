@@ -2,7 +2,7 @@
 
 using Spectre.Console;
 
-internal class Location
+public class Location
 {
     public string Detail { get; set; }
     public Boss Boss { get; set; }

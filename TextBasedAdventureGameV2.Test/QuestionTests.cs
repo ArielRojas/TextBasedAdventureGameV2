@@ -12,7 +12,7 @@ public class QuestionTests
         var answer = "answer1";
         var questionType = QuestionType.SIMPLE_SELECT;
 
-        var question = new Question(questionDetail, answer, questionType);
+        var question = new Question(questionDetail, answer, questionType, []);
 
         Assert.NotNull(question);
         Assert.Equal(questionDetail, question.QuestionDetail);
